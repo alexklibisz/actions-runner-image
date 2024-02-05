@@ -1,7 +1,21 @@
 FROM ghcr.io/actions/actions-runner:2.311.0
 
-# Git
+# Initial update.
 RUN sudo apt-get update
+
+# Docker.
+RUN sudo apt-get install -y ca-certificates curl && \
+  sudo install -m 0755 -d /etc/apt/keyrings && \
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+  sudo chmod a+r /etc/apt/keyrings/docker.asc && \
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+  sudo apt-get update && \
+  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Git
 RUN sudo apt-get install -y git
 
 # SBT (Still need to install Java separately)
@@ -12,3 +26,4 @@ RUN sudo apt-get install apt-transport-https curl gnupg -yqq && \
   sudo chmod 644 /etc/apt/trusted.gpg.d/scalasbt-release.gpg && \
   sudo apt-get update && \
   sudo apt-get install sbt
+
