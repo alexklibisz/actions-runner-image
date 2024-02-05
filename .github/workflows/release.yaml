@@ -12,8 +12,8 @@ jobs:
     name: Release
     runs-on: ubuntu-22.04
     permissions:
-      contents: read
-      packages: write
+      contents: write # To clone the repo and create a release.
+      packages: write # To push the Docker image to ghcr.
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v2
